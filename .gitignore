@@ -1,0 +1,4 @@
+__pycache__/
+smarterENV/
+.vscode/
+test.py
