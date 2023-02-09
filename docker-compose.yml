@@ -9,6 +9,8 @@ services:
         image: smart-api:1.0
         ports:
             - 8080:8080
+        depends_on:
+            - postgresql-container
 
     postgresql-container:
         image: postgres:14
