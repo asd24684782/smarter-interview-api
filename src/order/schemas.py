@@ -5,7 +5,7 @@ from datetime import datetime
 class OrderSchema(BaseModel):
     order_id        : Optional[str]
     customer_name   : str
-    custmer_id      : str
+    customer_id      : str
     purchase_time   : Optional[datetime]
     
     @validator('customer_name')

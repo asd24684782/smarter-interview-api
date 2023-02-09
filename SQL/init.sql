@@ -1,7 +1,7 @@
 CREATE TABLE orders(
 	order_id VARCHAR(20) PRIMARY KEY,
 	customer_name VARCHAR(10) NOT NULL,
-	custmer_id	VARCHAR(36) NOT NULL,
+	customer_id	VARCHAR(36) NOT NULL,
 	purchase_time TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 

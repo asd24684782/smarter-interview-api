@@ -15,7 +15,7 @@ class Order:
     def get_order_by_id(self, order_id):
         try:
             logger.info(f'get order {order_id}')
-            sql = """ SELECT order_id, customer_name, custmer_id, purchase_time FROM orders WHERE order_id=%s"""
+            sql = """ SELECT order_id, customer_name, customer_id, purchase_time FROM orders WHERE order_id=%s"""
             conn = self.__database_connection_pool.connect()
             
             with conn.cursor() as cur:
@@ -40,7 +40,7 @@ class Order:
             conn.autocommit = False
 
             insert_order_sql = """ INSERT INTO orders 
-                    (order_id, customer_name, custmer_id)
+                    (order_id, customer_name, customer_id)
                     VALUES(%s, %s, %s)
                     """
 

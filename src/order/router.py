@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import logging
 import uuid
+from datetime import datetime
 
 from fastapi import APIRouter, status
 
@@ -17,11 +18,12 @@ router = APIRouter(
 logger = logging.getLogger()
 
 # ----------------------- api ------------------------------------
-@router.get("/{order_id}")
-async def get_order_by_id(order_id: str, status_code=status.HTTP_201_CREATED):
+@router.get("/{order_id}", response_model=OrderSchema, status_code=status.HTTP_201_CREATED)
+async def get_order_by_id(order_id: str):
     try:
         order_tuple = order_db.get_order_by_id(order_id)
-
+        logger.info(order_tuple)
+        #order = OrderSchema(**{key: order_tuple[i] for i, key in enumerate(OrderSchema.__fields__.keys())})
         return order_tuple
 
     except Exception as e:
@@ -34,12 +36,18 @@ async def add_order_and_item(order_item_body: OrderItemCreateBody):
         order = order_item_body.order
         items = order_item_body.items
 
-        vote_tuple = (vote.name, vote.description, vote.activity_date, vote.end_time, vote.server_id)
-        vote_id = order_db.insert_vote(vote_tuple)
 
-        for option in options:
-            option_tuple = (option.name, vote_id)
-            await order_db.insert_option(option_tuple)
+        now = datetime.now()
+        order_id = datetime.strftime(now, '%Y%m%d%H%M%S%f')
+
+        order_tuple = (order_id, order.customer_name, order.customer_id, now)
+
+        item_tuple_list = []
+        for item in items:
+            item_tuple = (item.product_name, item.product_id, item.amount, item.price, order_id)
+            item_tuple_list.append(item_tuple)
+
+        order_db.insert_order_and_items(order_tuple, item_tuple_list)
 
         return 'OK'
 
