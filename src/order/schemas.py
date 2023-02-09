@@ -2,7 +2,7 @@ from pydantic import BaseModel, validator
 from typing import Optional, List, Union
 from datetime import datetime
 
-class order(BaseModel):
+class OrderSchema(BaseModel):
     order_id        : Optional[str]
     customer_name   : str
     custmer_id      : str
@@ -15,7 +15,7 @@ class order(BaseModel):
         return v
 
 
-class item(BaseModel):
+class ItemSchema(BaseModel):
     order_id          : str
     product_name      : str
     product_id        : str
@@ -29,6 +29,6 @@ class item(BaseModel):
         return v
 
 
-class order_item_create_body(BaseModel):
-    order  : order
-    items  : Optional[List[Union[item, None]]]
+class OrderItemCreateBody(BaseModel):
+    order  : OrderSchema
+    items  : Optional[List[Union[ItemSchema, None]]]

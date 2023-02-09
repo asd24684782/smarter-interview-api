@@ -2,10 +2,10 @@
 import logging
 import uuid
 
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 
-from order.models import vote_db
-from order.schemas import order_item_create_body
+from order.models import order_db
+from order.schemas import OrderSchema, OrderItemCreateBody
 
 # -------------------- global -----------------------------------
 router = APIRouter(
@@ -18,28 +18,28 @@ logger = logging.getLogger()
 
 # ----------------------- api ------------------------------------
 @router.get("/{order_id}")
-async def get_order_by_id(order_id: str):
+async def get_order_by_id(order_id: str, status_code=status.HTTP_201_CREATED):
     try:
-        votes_tuple_list = vote_db.get_server_vote(order_id)
+        order_tuple = order_db.get_order_by_id(order_id)
 
-        return votes_tuple_list
+        return order_tuple
 
     except Exception as e:
         return e
 
 
 @router.post('/')
-async def add_order_and_item(order_item_body: order_item_create_body):
+async def add_order_and_item(order_item_body: OrderItemCreateBody):
     try:
-        vote = vote_body.vote
-        options = vote_body.vote_options
+        order = order_item_body.order
+        items = order_item_body.items
 
         vote_tuple = (vote.name, vote.description, vote.activity_date, vote.end_time, vote.server_id)
-        vote_id = await vote_db.insert_vote(vote_tuple)
+        vote_id = order_db.insert_vote(vote_tuple)
 
         for option in options:
             option_tuple = (option.name, vote_id)
-            await vote_db.insert_option(option_tuple)
+            await order_db.insert_option(option_tuple)
 
         return 'OK'
 
@@ -50,10 +50,9 @@ async def add_order_and_item(order_item_body: order_item_create_body):
 @router.get('/order/{order_id}/item')
 async def get_order_item(order_id: str):
     try:
-        option_tuple = (option.name, option.v_id)
-        await vote_db.insert_option(option_tuple)
+        item_tuple_list = order_db.get_item_by_order_id(order_id)
 
-        return 'OK'
+        return item_tuple_list
 
     except Exception as e:
         return e

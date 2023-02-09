@@ -3,7 +3,7 @@ import logging
 import time
 from datetime import datetime
 
-from fastapi import FastAPI
+from fastapi import FastAPI, BackgroundTasks
 
 from order.router import router as order_router
 #---------------- global -------------------# 
@@ -12,6 +12,7 @@ app.include_router(order_router)
 
 logger = logging.getLogger()
 logging.basicConfig(level=logging.DEBUG,format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s')
+
 #------------------- api ---------------------#
 @app.on_event("startup")
 async def startup_event():

@@ -1,6 +1,7 @@
 import logging
 
 import psycopg2
+from psycopg2.extras import execute_batch
 
 from database import database_connection_pool
 
@@ -36,6 +37,7 @@ class Order:
         try:
             # insert order
             conn = self.__database_connection_pool.connect()
+            conn.autocommit = False
 
             insert_order_sql = """ INSERT INTO orders 
                     (order_id, customer_name, custmer_id)
@@ -46,11 +48,12 @@ class Order:
                     (product_name, product_id, amount, price, order_id)
                     VALUES(%s, %s, %s, %s, %s)
                     """
+  
 
             with conn.cursor() as cur:
                 cur.execute(insert_order_sql, order_insert_tuple)
-                for item_tuple in item_insert_tuple_list:
-                    cur.execute(insert_item_sql, item_tuple)
+                execute_batch(cur, insert_item_sql, item_insert_tuple_list)
+
 
             conn.commit()  
             logger.info('insert successfully.')
