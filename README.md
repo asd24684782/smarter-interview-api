@@ -1,8 +1,23 @@
 # smarter-interview-api
-for smarter interview
 
+## Getting Started
 
-Down 
+## Build 
 ```
-docker-compose down --volumes
+make build
+```
+
+### Run containers
+```
+make up
+```
+
+### Stop containers
+```
+make down
+```
+
+### init db
+```
+make init-db
 ```

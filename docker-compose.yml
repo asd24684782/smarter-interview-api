@@ -1,8 +1,14 @@
 version: "3.7"
 
 services:
-
-
+    smart-api:
+        container_name: smart-api
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        image: smart-api:1.0
+        ports:
+            - 8080:8080
 
     postgresql-container:
         image: postgres:14

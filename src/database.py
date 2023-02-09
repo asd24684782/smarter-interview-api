@@ -25,10 +25,10 @@ class Postgres:
                                                                 port=self.__port,
                                                                 database=self.__database)
             if (self.__postgreSQL_pool):
-                print("Connection pool created successfully")
+                logger.info("Connection pool created successfully")
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while connecting to PostgreSQL", error)
+            logger.info("Error while connecting to PostgreSQL", error)
 
 
     def connect(self):

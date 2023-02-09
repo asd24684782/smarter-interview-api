@@ -1,11 +1,10 @@
-BACK_SERVICE := smart-api
-BASE_SERVICE := baseImage
+COMPOSE = @docker-compose
 ROOT_DIR := $(shell pwd)
 BLUE = \033[34m
 NC = \033[0m
 
 
-.PHONY: help build build-base build-back build-all
+.PHONY: help up down init-db
 
 help: ## Show help message
 	@printf "Usage:\n"
@@ -18,17 +17,21 @@ help: ## Show help message
 
 .DEFAULT_GOAL := help
 
-# DOCKER TASKS
-## build
-build: build-back ## Build the container
+## build image
+build: ## build
+	$(COMPOSE) build
 
-build-all: build-base build-back ## build base and back
 
-build-base: ## Build backend base image
-	docker-compose build --force-rm --no-cache $(BASE_SERVICE)
+## Run containers
+up: ## start
+	$(COMPOSE) up
 
-build-back: ## Build backend image
-	docker-compose build --force-rm --no-cache $(BACK_SERVICE)
 
-build-push: build-back ## push ${BACK_SERVICE} to docker hub
-	docker-compose push $(BACK_SERVICE)
+## Stop containers
+down: ## stop
+	$(COMPOSE) down
+
+
+## init db
+init-db: ## remove db volumes
+	$(COMPOSE) down --volumes

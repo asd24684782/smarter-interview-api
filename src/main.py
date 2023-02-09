@@ -3,7 +3,7 @@ import logging
 import time
 from datetime import datetime
 
-from fastapi import FastAPI, BackgroundTasks
+from fastapi import FastAPI
 
 from order.router import router as order_router
 #---------------- global -------------------# 

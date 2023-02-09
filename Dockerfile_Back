@@ -1,9 +1,0 @@
-FROM smart-api:base 
-
-COPY imageBin/ /opt/smart/bin
-
-COPY src/        /opt/smart/src
-
-WORKDIR /opt/smart/bin
-
-CMD ["bash","run.sh"]

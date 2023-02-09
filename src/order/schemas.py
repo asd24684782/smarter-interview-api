@@ -2,11 +2,9 @@ from pydantic import BaseModel, validator
 from typing import Optional, List, Union
 from datetime import datetime
 
-class OrderSchema(BaseModel):
-    order_id        : Optional[str]
+class OrderPostSchema(BaseModel):
     customer_name   : str
-    customer_id      : str
-    purchase_time   : Optional[datetime]
+    customer_id     : str
     
     @validator('customer_name')
     def customer_name_rules(cls, v, values, **kwargs):
@@ -15,8 +13,14 @@ class OrderSchema(BaseModel):
         return v
 
 
-class ItemSchema(BaseModel):
-    order_id          : str
+class OrderResponseSchema(BaseModel):
+    order_id        : Optional[str]
+    customer_name   : str
+    customer_id     : str
+    purchase_time   : Optional[datetime]
+    
+
+class ItemPostSchema(BaseModel):
     product_name      : str
     product_id        : str
     amount            : int
@@ -29,6 +33,19 @@ class ItemSchema(BaseModel):
         return v
 
 
+class ItemResponseSchema(BaseModel):
+    product_name      : str
+    product_id        : str
+    amount            : int
+    price             : int
+
+
+
 class OrderItemCreateBody(BaseModel):
-    order  : OrderSchema
-    items  : Optional[List[Union[ItemSchema, None]]]
+    order  : OrderPostSchema
+    items  : Optional[List[Union[ItemPostSchema, None]]]
+
+
+class OrderItemResponseSchemra(BaseModel):
+    order  : OrderResponseSchema
+    items  : List[ItemResponseSchema]
